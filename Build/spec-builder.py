@@ -152,7 +152,7 @@ def runBuild(targetDir):
         logging.warning("Trusted Scripts Directory hasn't exist.")
 
     # deploy customized extend-script file to trusted location
-    src = os.path.join(os.path.dirname(os.path.realpath(__file__)), "extend-scripts", FILE_SPEC_BUILDER_JSX)
+    src = os.path.join(os.path.dirname(os.path.realpath(__file__)), FILE_SPEC_BUILDER_JSX)
     dest = os.path.join(trustedScripts, PROCESS_ID + "-" + FILE_SPEC_BUILDER_JSX)
 
     fileSrc = open(src, "r")
