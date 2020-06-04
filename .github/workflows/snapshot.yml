@@ -1,6 +1,6 @@
 # This is the basic workflow to build ICS documentation
 
-name: CI
+name: Snapshot Build
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -24,4 +24,4 @@ jobs:
 
     # Uses the remote self-host to build the ICS
     - name: Build ICS-Base Specification
-      run: python spec-builder\spec-builder.py $env:GITHUB_WORKSPACE\FrameMaker\ICS-Base.book XJDF-BLACK "ICS JDF Base" "1.5-DRAFT-[DATE]" "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA.substring(0,7)"
+      run: python Build\spec-builder.py $env:GITHUB_WORKSPACE\FrameMaker\ICS-Base.book XJDF-BLACK "ICS JDF Base" "1.5-DRAFT-[DATE]" "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA.substring(0,7)"
