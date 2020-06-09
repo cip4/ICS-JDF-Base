@@ -85,10 +85,11 @@ def main():
         f_handler.setLevel(logging.INFO)
         f_handler.setFormatter(logging_formatter)
         logger.addHandler(f_handler)
-        logging.info("Clean or Create build target directory")
+        logging.info("Clean or Create build target directory: %s", target_dir)
         logging.info("Created Log File")
 
         # Clean the source directory of stale locks backups etc
+        logging.info("Clean Framemaker source directory: %s", source_dir)
         cleanupSources(source_dir)
         
         # Update the target configuration with the build variables
@@ -111,7 +112,6 @@ def main():
         
     except Exception as e:
         logger.error("Error preparing build environment.")
-        logger.error('Exception: $s', e.args[1])
         sys.exit()
 
     logging.info("Terminate running FrameMaker.exe if exists.")
@@ -159,8 +159,6 @@ def main():
 # Clean up the Framemaker Sources of the JDF Specification.
 #
 def cleanupSources(source_dir):
-    logging.info("Clean Framemaker source directory")
-
     # String array of file EXTENSIONS to delete
     extensions = [".lck", ".backup.fm", ".recover.fm"]
 
