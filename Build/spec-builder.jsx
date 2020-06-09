@@ -1,72 +1,93 @@
-﻿#target framemaker
+﻿/**
+  * Build Script for:    ICS JDF Base
+  *
+  * Uses Adobe Extend Script Tool Kit
+  *
+  *  Requires a strict directory hierarchy so that all access is relative to a notional 'root_directory'
+  *  This file must be in .\Build
+  *
+  *  The configuration file (with runtime parameters)
+  *         .\target\snapshot.config
+  *
+  *  Framemaker  book, documents, templates etc (all inputs)
+  *         .\Framemaker
+  *
+  * The script produces the resulting PDF and log files in
+  *         .\target
+  *
+  **/
 
-/**
- * This script creates PDF documents from Framemaker book.
- * For the JDF/XJDF specification this requires application and selection of variables, formats etc
- * to ensure the correct version is produced, ie the JDF 1.x, XJDF 2.x or Both. 
- * The latter is the editing working version.
- **/
-var TEMPLATE_JDF = "Template_V5_JDF1x.fm";
-var TEMPLATE_XJDF = "Template_V5_XJDF2x.fm";
-var TEMPLATE_BOTH = "Template_V5.fm";
-var TEMPLATE_PLAIN = "Template_V5.fm";
-var TEMPLATE_ICS = "Template_ICS.fm"
-var TEMPLATE_ICS_MIS = "Template_ICS_Mis.fm"
-var TEMPLATE_ICS_CUS = "Template_ICS_Cus.fm"
-
-var KEY_FILE_BOOK = "file.book";
-var KEY_FILE_LOG = "file.logging";
-var KEY_DIR_SOURCE = "dir.source";
-var KEY_DIR_TARGET = "dir.target";
-var KEY_BUILD_FILENAME = "build.filename";
-var KEY_BUILD_LAYOUT = "build.layout"
-
-// Configuration variables
-var COVER_TITLE = "doc.cover_title"
-var COVER_VERSION = "doc.cover_version"
-var COVER_BANNER_1 = "doc.cover_banner_1"
-var COVER_BANNER_2 = "doc.cover_banner_2"
-var RUNNING_TITLE = "doc.running_title"
-// And the variable names in all templates
-var COVER_TITLE_NAME = "Cover Title"
-var COVER_VERSION_NAME = "Cover Version"
-var COVER_BANNER_1_NAME = "Cover Banner 1"
-var COVER_BANNER_2_NAME = "Cover Banner 2"
-var RUNNING_TITLE_NAME = "Running Title"
-
+#target framemaker
 
 // !! ATTENTION !!
-// !! The following two lines are being overwritten by the python script. DON'T MODIFY !!
-log("---- Start Script [TEST-PROCESS] ----");
-var FILE_CONFIG = "C:\\Workspace\\spec-builder\\build.test.config";
-var PROCESS_ID = "TEST_PROCESS";
+// !! The following line is being overwritten by the python script. DON'T MODIFY !!
+// This connects the specific build ini file to this script
+var FILE_CONFIG = "";
 
-log("JSX-Version (ExtendScript): 0.9");
+// Configuration file access keys
+var KEY_FILE_BOOK = "file.book";
+var KEY_FILE_TEMPLATE = "file.template";
 
-var filename = readConfig(KEY_FILE_BOOK);
+var COVER_TITLE = "doc.cover.title";
+var COVER_VERSION = "doc.cover.version";
+var RUNNING_TITLE = "doc.running.title";
+//var COVER_BANNER_1 = "doc.cover_banner_1";
+//var COVER_BANNER_2 = "doc.cover_banner_2";
 
-log("Load book '" + filename + "'...");
-var book = openFile(filename);
+var KEY_DIR_SOURCE = "dir.source";
+var KEY_DIR_TARGET = "dir.target";
 
-log("Update components of book '" + book.Name + "'...");
-updateComponents(book);
+var KEY_BUILD_FILENAME = "build.filename";
+var KEY_BUILD_LOCKFILE = "build.lock.file";
+var KEY_BUILD_FILELOG = "file.buildlog";
 
-log("Update book '" + book.Name + "'...");
-updateBook(book);
 
-log("Save book '" + book.Name + "' as PDF...");
-savePdf(book);
+// The single entry point - allows 'return' to exit immediately
+main();
 
-// log("Save book '" + book.Name + "' as HTML...");
-// saveHtml(book);
+function main() {
+    // Check that the configuration has supplied useful variables.
+    if ((typeof FILE_CONFIG === 'undefined') || (FILE_CONFIG == "")) {
+        log("Loading configuration failure!");
+        return -1;
+    }
 
-log("Close book...")
-book.Close(Constants.FF_CLOSE_MODIFIED);
+    // Check that the lock file exists
+    build_lock_file = readConfig (KEY_BUILD_LOCKFILE)
+    lockFile = File(build_lock_file);
+    if (!lockFile.exists) {
+        log("Cannot locate build lock file");
+        return -1;
+    }
 
-log("Process completed.");
-$.sleep(5000)
-File(readConfig(KEY_DIR_TARGET) + PROCESS_ID).remove();
+    log("JSX-Version (ExtendScript): 0.9");
 
+    var filename = readConfig(KEY_DIR_SOURCE) +"\\" +readConfig(KEY_FILE_BOOK);
+
+    log("Load book '" + filename + "'...");
+    var book = openFile(filename);
+
+    log("Update components of book '" + book.Name + "'...");
+    updateComponents(book);
+
+    log("Update book '" + book.Name + "'...");
+    updateBook(book);
+
+    log("Save book '" + book.Name + "' as PDF...");
+    savePdf(book);
+
+    // log("Save book '" + book.Name + "' as HTML...");
+    // saveHtml(book);
+
+    log("Close book...")
+    book.Close(Constants.FF_CLOSE_MODIFIED);
+
+    log("Process completed.");
+    $.sleep(5000)
+    lockFile.remove();
+    
+    return 0;
+}
 
 /**
  * Open the book or document.   
@@ -99,32 +120,8 @@ function openFile(filename) {
  **/
 function updateComponents(book) {
     // load the one template required for this build layout
-    var layout = readConfig(KEY_BUILD_LAYOUT);
-    var template;
-    if(layout == "XJDF-BLACK") {
-        // XJDF 
-        template = openFile(readConfig(KEY_DIR_SOURCE) + TEMPLATE_XJDF);
-    } else if (layout == "JDF-BLACK") {
-        // JDF
-        template = openFile(readConfig(KEY_DIR_SOURCE) + TEMPLATE_JDF);
-    } else if (layout == "BOTH-COLORED") {
-        // Both
-        template = openFile(readConfig(KEY_DIR_SOURCE) + TEMPLATE_BOTH);
-    } else if (layout == "PLAIN") {
-        // Plain - i.e. unversioned
-        template = openFile(readConfig(KEY_DIR_SOURCE) + TEMPLATE_PLAIN);
-    } else if (layout == "ICS") {
-        // ICS - unversioned
-        template = openFile(readConfig(KEY_DIR_SOURCE) + TEMPLATE_ICS);
-    } else if (layout == "ICSMIS") {
-        // ICS - unversioned
-        template = openFile(readConfig(KEY_DIR_SOURCE) + TEMPLATE_ICS_MIS);
-    } else if (layout == "ICSCUS") {
-        // ICS - unversioned
-        template = openFile(readConfig(KEY_DIR_SOURCE) + TEMPLATE_ICS_CUS);
-    } else {
-      return; // No valid template
-    }
+    var templatefilename = readConfig(KEY_DIR_SOURCE) +"\\" +readConfig(KEY_FILE_TEMPLATE);
+    template = openFile(templatefilename);
     
     log("Template used: " + template.Name);
     // Change the variables in the template to reflect this build
@@ -133,15 +130,9 @@ function updateComponents(book) {
     // Select which options of the template should be applied to all documents.
     // For plain builds this is just the variables.
     var formatFlags;
-    if (layout == "PLAIN") {
-        // Plain - i.e. unversioned
-        formatFlags = Constants.FF_UFF_VAR;     // Variables
-    } else {
-        // Versioned 
-        formatFlags = Constants.FF_UFF_COND	|	// Conditional Text Settings
-                      Constants.FF_UFF_FONT |   // Character Formats
-                      Constants.FF_UFF_VAR;     // Variables
-    }
+    formatFlags = Constants.FF_UFF_COND	|   // Conditional Text Settings
+                      Constants.FF_UFF_FONT |          // Character Formats
+                      Constants.FF_UFF_VAR;            // Variables
 
     // Update all documents in the book
     // iterate over all book components
@@ -231,8 +222,8 @@ function updateTemplate(tpl) {
     // Otherwise use the values from the template - default to adding the variables with an empty value
     setVariable(tpl, COVER_TITLE_NAME, readConfig(COVER_TITLE));
     setVariable(tpl, COVER_VERSION_NAME, readConfig(COVER_VERSION));
-    setVariable(tpl, COVER_BANNER_1_NAME, readConfig(COVER_BANNER_1));
-    setVariable(tpl, COVER_BANNER_2_NAME, readConfig(COVER_BANNER_2));
+    //setVariable(tpl, COVER_BANNER_1_NAME, readConfig(COVER_BANNER_1));
+    //setVariable(tpl, COVER_BANNER_2_NAME, readConfig(COVER_BANNER_2));
     setVariable(tpl, RUNNING_TITLE_NAME, readConfig(RUNNING_TITLE));
 }
 
@@ -261,7 +252,7 @@ function savePdf(book) {
     var i = GetPropIndex(params, Constants.FS_FileType);
     params[i].propVal.ival = Constants.FV_SaveFmtPdf;
 
-    var path = readConfig(KEY_DIR_TARGET) + readConfig(KEY_BUILD_FILENAME) + ".pdf";
+    var path = readConfig(KEY_DIR_TARGET) + "\\" + readConfig(KEY_BUILD_FILENAME);
     log("Write PDF to '" + path + "'");
     book.Save(path, params, returnParamsp);
 }
@@ -312,7 +303,8 @@ function readConfig(key) {
  * Log a message.
  **/
 function log(message) {
-    var logFile = File(readConfig(KEY_FILE_LOG));
+    var logFile = File(readConfig(KEY_BUILD_FILELOG));
+    //var logFile = File();
     
     // create timestamp string
     var timestamp = "";
