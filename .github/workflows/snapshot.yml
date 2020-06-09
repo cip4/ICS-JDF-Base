@@ -24,4 +24,4 @@ jobs:
 
     # Uses the remote self-host to build the ICS
     - name: Build ICS-Base Specification
-      run: python Build\spec-builder.py ICS_JDF_Base.ini "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA.substring(0,7)"
+      run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA.substring(0,7)"
