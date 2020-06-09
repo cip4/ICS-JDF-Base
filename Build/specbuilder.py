@@ -4,7 +4,7 @@ import os
 import sys
 import time
 #import pathlib
-import configparser
+import ConfigParser
 from subprocess import call
 from subprocess import Popen
 
