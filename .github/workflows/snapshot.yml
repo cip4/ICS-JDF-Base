@@ -21,7 +21,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout source
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       # Uses the remote self-host to build the ICS
       #- name: Check Python version
@@ -31,7 +31,7 @@ jobs:
         run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA.substring(0,7)"
 
       - name: Upload ICS Specification artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: ICS-JDF-Base-artifact
           path: target/*.pdf
