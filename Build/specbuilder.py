@@ -124,7 +124,7 @@ def main():
     logging.info("Start Framemaker...")
     FRAMEMAKER_PROCESS = Popen("\"" + FILE_RUNTIME_FM + "\"")
     
-    PAUSE_PERIODE = 2
+    PAUSE_PERIODE = 6
     logging.info("Wait for FrameMaker (%d sec.)..." % (PAUSE_PERIODE * 10))
     
     while PAUSE_PERIODE > 0:

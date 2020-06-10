@@ -31,8 +31,8 @@ var KEY_FILE_TEMPLATE = "file.template";
 var COVER_TITLE = "doc.cover.title";
 var COVER_VERSION = "doc.cover.version";
 var RUNNING_TITLE = "doc.running.title";
-//var COVER_BANNER_1 = "doc.cover_banner_1";
-//var COVER_BANNER_2 = "doc.cover_banner_2";
+var COVER_BANNER_1 = "doc.cover_banner_1";
+var COVER_BANNER_2 = "doc.cover_banner_2";
 
 var KEY_DIR_SOURCE = "dir.source";
 var KEY_DIR_TARGET = "dir.target";
@@ -40,6 +40,15 @@ var KEY_DIR_TARGET = "dir.target";
 var KEY_BUILD_FILENAME = "build.filename";
 var KEY_BUILD_LOCKFILE = "build.lock.file";
 var KEY_BUILD_FILELOG = "file.buildlog";
+
+// All templates are expected to have the following variables.
+// These are updated as part of the build process
+var COVER_TITLE_NAME = "Cover Title"
+var COVER_VERSION_NAME = "Cover Version"
+var COVER_BANNER_1_NAME = "Cover Banner 1"
+var COVER_BANNER_2_NAME = "Cover Banner 2"
+var RUNNING_TITLE_NAME = "Running Title"
+
 
 
 // The single entry point - allows 'return' to exit immediately
