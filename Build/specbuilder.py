@@ -4,7 +4,7 @@ import os
 import sys
 import time
 #import pathlib
-import ConfigParser
+import configparser
 from subprocess import call
 from subprocess import Popen
 
@@ -46,6 +46,7 @@ c_handler = logging.StreamHandler()
 c_handler.setLevel(logging.INFO)
 c_handler.setFormatter(logging_formatter)
 logger.addHandler(c_handler)
+logger.info("Python version: " + str(sys.version_info))
 
 # This is the primary function 
 def main():
@@ -93,6 +94,7 @@ def main():
         cleanupSources(source_dir)
         
         # Update the target configuration with the build variables
+        logging.info("Update target configuration")
         config = loadConfiguration(os.path.join(build_dir, paramConfigFile))
         configBuild = config[KEY_CONFIG_SECTION]
         configBuild[KEY_DIR_SOURCE] = source_dir
@@ -112,8 +114,9 @@ def main():
         
     except Exception as e:
         logger.error("Error preparing build environment.")
+        logger.error("Exception: " + str(e))
         sys.exit()
-
+        
     logging.info("Terminate running FrameMaker.exe if exists.")
     Popen("TASKKILL /F /IM FrameMaker.exe")
     time.sleep(5)
