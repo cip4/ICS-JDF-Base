@@ -68,7 +68,7 @@ def main():
     BuildFileName = BuildRootName + " DRAFT-" + time.strftime('%Y%m%d') + " build-" + paramBuildNumber + ".pdf"
     BuildLogFileName = BuildRootName + time.strftime('%Y%m%d') + " build-" + paramBuildNumber + ".log" 
     BuildLogFile = os.path.join(target_dir, BuildLogFileName)
-    CoverVersion = "Draft-" + time.strftime('%Y%m%d') + " build-" + paramBuildNumber + "(rev: " + paramGitVersion + ")"
+    CoverVersion = "Draft-" + time.strftime('%Y%m%d') + " build-" + paramBuildNumber + "(rev: " + paramGitVersion[:8] + ")"
     
     # Define the build lock file - used to determine when the jsx file has completed
     BuildLockFile = os.path.join(target_dir, BuildRootName + "-Build.lck")
