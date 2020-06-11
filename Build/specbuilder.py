@@ -129,7 +129,7 @@ def main():
     
     while PAUSE_PERIODE > 0:
         time.sleep(10)
-        PAUSE_PERIODE -= 4
+        PAUSE_PERIODE -= 1
         logging.info("%d secs..." % (PAUSE_PERIODE * 10))
     
     logging.info("Start processing '" + BuildRootName + "' ...")
