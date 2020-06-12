@@ -1,17 +1,14 @@
 # This is the basic workflow to build ICS documentation
 
-name: Snapshot Build
+name: Release Build
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
     branches: [ master ]
-    tags-ignore:
+    tags:
       - ICS-JDF-Base-*
-    
-  pull_request:
-    branches: [ master ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,14 +25,11 @@ jobs:
 
       # Build test.
       - name: Check Build Variables
-        run:  >
-          python Build\buildtest.py ICS_JDF_Base.ini 
-          "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
-          "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
-
+        run:  python Build\buildtest.py ICS_JDF_Base.ini "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
+        
       # Uses the remote self-host to build the ICS
       #- name: Build ICS-Base Specification
-      #  run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
+      #  run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
 
       #- name: Upload ICS Specification artifact
       #  uses: actions/upload-artifact@v2
