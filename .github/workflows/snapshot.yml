@@ -34,12 +34,12 @@ jobs:
           "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
 
       # Uses the remote self-host to build the ICS
-      #- name: Build ICS-Base Specification
-      #  run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
+      - name: Build ICS-Base Specification
+        run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
 
       #- name: Upload ICS Specification artifact
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    name: ICS-JDF-Base-artifact
-      #    path: target/*.pdf
+        uses: actions/upload-artifact@v2
+        with:
+          name: ICS-JDF-Base-artifact
+          path: target/*.pdf
           
