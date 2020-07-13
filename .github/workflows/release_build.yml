@@ -37,7 +37,7 @@ jobs:
 
       # Build test.
       - name: Set current date as env variable
-        run: echo "::set-env name=NOW::$(date +'%Y-%m-%dT%H:%M:%S')"
+        run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
       - name: Echo current date
         run: echo $NOW        
 
@@ -45,7 +45,7 @@ jobs:
         run:  >
           python Build\buildtest.py ICS_JDF_Base.ini 
           "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
-          "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME" "Senv:TEST_NAME"
+          "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME" "Senv:TEST_NAME" "$env:NOW"
           
           
           
