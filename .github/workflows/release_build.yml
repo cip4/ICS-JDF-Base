@@ -37,10 +37,12 @@ jobs:
 
       # Build test.
       - name: Set current date as env variable
-        run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"        
+        run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
+        
+      -name: Set file name
+        run: echo "::set-env name=FILE_NAME::$('ICS-JDF-Base Draft-${{env.GITHUB_SHA}} Build-${{env.GITHUB_RUN_NUMBER}}')"
 
       - name: Check Build Variables
-        run: echo "::set-env name=FILE_NAME::$('ICS-JDF-Base Draft-${{env.GITHUB_SHA}} Build-${{env.GITHUB_RUN_NUMBER}}')"
         run:  >
           python Build\buildtest.py ICS_JDF_Base.ini "$env:FILE_NAME" "$env:GITHUB_WORKFLOW" "$env:BUILD_TYPE" "$env:NOW"
           "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
