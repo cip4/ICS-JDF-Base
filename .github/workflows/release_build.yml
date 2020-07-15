@@ -43,7 +43,7 @@ jobs:
         run:  >
           python Build\buildtest.py ICS_JDF_Base.ini 
           "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA" "$env:TEST_NAME" "$env:NOW"
-          ${{env:TEST_NAME}} ${{env.TEST_NAME}}
+          ${{env.TEST_NAME}}
           "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME" "$env.TEST_NAME" "$env.NOW"
           
           
