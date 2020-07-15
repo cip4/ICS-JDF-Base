@@ -43,7 +43,7 @@ jobs:
       - name: Set file name
         run: echo "::set-env name=FILE_NAME::ICS-JDF-Base Draft-%SHA% Build-%RUN%"
         env:
-          SHA:  ${{ env:GITHUB_SHA }}
+          SHA:  env:GITHUB_SHA
 
       - name: Check Build Variables
         run:  >
