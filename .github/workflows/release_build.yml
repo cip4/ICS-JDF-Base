@@ -41,7 +41,7 @@ jobs:
 
       # Create the final artifact file name.
       - name: Set file name
-        run: echo "::set-env name=FILE_NAME::ICS-JDF-Base Draft-${{env.GITHUB_SHA}} Build-${{env.GITHUB_RUN_NUMBER}}"
+        run: echo "::set-env name=FILE_NAME::ICS-JDF-Base Draft-%GITHUB_SHA% Build-%GITHUB_RUN_NUMBER%"
 
       - name: Check Build Variables
         run:  >
