@@ -38,8 +38,8 @@ jobs:
       # Build test.
       - name: Set current date as env variable
         run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
-      - name: Set artifact file name
-        run: echo "::set-env name=FILE_NAME::$('ICS-JDF-Base Draft-{0} build-{1}' -f (date -UFormat '%Y%m%d'), ${{env:GITHUB_RUN_NUMBER}} )"
+        env:
+          FILE_NAME: 'ICS-JDF-Base Draft-${{env:NOW}} Build-${{env:GITHUB_RUN_NUMBER}}'
 
       - name: Check Build Variables
         run:  >
