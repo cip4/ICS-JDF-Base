@@ -26,7 +26,7 @@ jobs:
     runs-on: self-hosted
     
     env:
-      TEST_NAME: Mona
+      BUILD_TYPE: Mona
       
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -38,14 +38,11 @@ jobs:
       # Build test.
       - name: Set current date as env variable
         run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
-        env:
-          FILE_NAME: format('ICS_JDF_Base Draft-{0} Build-{1}', $env:NOW, $env:GITHUB_RUN_NUMBER) 
 
       - name: Check Build Variables
         run:  >
-          python Build\buildtest.py ICS_JDF_Base.ini "$env:FILE_NAME" 
-          "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA" "$env:TEST_NAME" "$env:NOW"
-          ${{env.TEST_NAME}}
+          python Build\buildtest.py ICS_JDF_Base.ini "$env:GITHUB_WORKFLOW" "$env:BUILD_TYPE" "$env:NOW"
+          "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
           "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
           
           

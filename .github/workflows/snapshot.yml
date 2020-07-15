@@ -7,12 +7,7 @@ name: Snapshot Build
 on:
   push:
     branches: [ master ]
-    tags-ignore:
-      - ICS-JDF-Base-**
     
-  pull_request:
-    branches: [ master ]
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -26,12 +21,12 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      # Build test.
-      - name: Check Build Variables
-        run:  >
-          python Build\buildtest.py ICS_JDF_Base.ini 
-          "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
-          "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
+      # Build test - only required to 'see' github's variables.
+      #- name: Check Build Variables
+      #  run:  >
+      #    python Build\buildtest.py ICS_JDF_Base.ini 
+      #    "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
+      #    "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
 
       # Uses the remote self-host to build the ICS
       - name: Build ICS-Base Specification
