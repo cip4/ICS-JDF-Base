@@ -26,7 +26,7 @@ jobs:
     runs-on: self-hosted
     
     env:
-      BUILD_TYPE: Mona
+      FULL_VERSION: 1.7
       
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -39,22 +39,12 @@ jobs:
       - name: Set current date as env variable
         run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
 
-      # Create the final artifact file name.
-      - name: Set file name
-        run: echo "::set-env name=FILE_NAME::ICS-JDF-Base Draft-%SHA% Build-%RUN%"
-        env:
-          SHA:  $env:GITHUB_SHA
-          FTEST: File-${{ env.GITHUB_SHA }}
-
       - name: Check Build Variables
         run:  >
-          python Build\buildtest.py ICS_JDF_Base.ini "ICS-JDF-Base Draft-$env:GITHUB_RUN_NUMBER Date-$env:NOW"
-          "$env:GITHUB_WORKFLOW" "$env:BUILD_TYPE" "$env:NOW"
-          "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
-          "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
-          
-          
-          
+          python Build\buildtest.py ICS_JDF_Base.ini 
+          "ICS-JDF-Base Draft-$env:NOW Date-$env:GITHUB_RUN_NUMBER"
+          "Version $env:FULL_VERSION Draft-$env:NOW Date-$env:GITHUB_RUN_NUMBER"
+
       # Uses the remote self-host to build the ICS
       #- name: Build ICS-Base Specification
       #  run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
