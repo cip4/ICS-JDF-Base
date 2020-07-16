@@ -60,18 +60,20 @@ def main():
     
     # Get the build 'run specific' params (Other build parameters are in the config file)
     paramConfigFile = sys.argv[1]
-    paramBuildNumber = sys.argv[2]
-    paramGitVersion = sys.argv[3]
+    paramBuildFileName = sys.argv[2]
+    paramCoverVersion = sys.argv[3]
+    paramBuildRunNumber = sys.argv[4]
     
     # Construct the actual build run parameters
+    BuildFileName = paramBuildFileName + ".pdf"
     BuildRootName = paramConfigFile.split(".")[0]
-    BuildFileName = BuildRootName + " DRAFT-" + time.strftime('%Y%m%d') + " build-" + paramBuildNumber + ".pdf"
-    BuildLogFileName = BuildRootName + time.strftime('%Y%m%d') + " build-" + paramBuildNumber + ".log" 
+    BuildLogFileName = BuildRootName + paramBuildRunNumber + ".log" 
     BuildLogFile = os.path.join(target_dir, BuildLogFileName)
-    CoverVersion = "Draft-" + time.strftime('%Y%m%d') + " build-" + paramBuildNumber + "(rev: " + paramGitVersion[:8] + ")"
+    CoverVersion = paramCoverVersion
     
     # Define the build lock file - used to determine when the jsx file has completed
-    BuildLockFile = os.path.join(target_dir, BuildRootName + "-Build.lck")
+    BuildLockFileName = BuildRootName + paramBuildRunNumber + ".lck" 
+    BuildLockFile = os.path.join(target_dir, BuildLockFileName)
     if os.path.isfile(BuildLockFile):
         os.remove(BuildLockFile,)
     

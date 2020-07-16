@@ -14,6 +14,10 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: self-hosted
+    
+    # The VERSION is the main release number i.e. 1.7 or 2.1
+    env:      
+      JDF_VERSION: 1.7      
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -21,21 +25,30 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
+      # Get the date 
+      - name: Get date
+        run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
+
       # Build test - only required to 'see' github's variables.
-      #- name: Check Build Variables
-      #  run:  >
-      #    python Build\buildtest.py ICS_JDF_Base.ini 
-      #    "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
-      #    "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
+      - name: Check Build Variables
+        run:  >
+          python Build\buildtest.py ICS_JDF_Base.ini
+          "ICS-JDF-Base $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+          "$env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+          "$env:GITHUB_RUN_NUMER"
 
       # Uses the remote self-host to build the ICS
-      - name: Build ICS-Base Specification
-        run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_RUN_NUMBER" "$env:GITHUB_SHA"
-
-      # Upload any artefact produced.
-      - name: Upload ICS Specification artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ICS-JDF-Base-artifact
-          path: target/*.pdf
+#      - name: Build ICS-Base Specification
+#        run:  >
+#          python Build\specbuilder.py ICS_JDF_Base.ini
+#          "ICS-JDF-Base $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+#          "$env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+#          "$env:GITHUB_RUN_NUMER"
+#
+#      # Upload any artefact produced.
+#      - name: Upload ICS Specification artifact
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ICS-JDF-Base-artifact
+#          path: target/*.pdf
           

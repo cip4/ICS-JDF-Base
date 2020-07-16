@@ -7,7 +7,7 @@ name: Release Build
 on:
   push:
     tags:
-      - ICS-JDF-Base-**
+      - *
 
   workflow_dispatch:
     inputs:
@@ -25,37 +25,41 @@ jobs:
     # The type of runner that the job will run on
     runs-on: self-hosted
     
-    env:
-      FULL_VERSION: 1.7
-      
-
+    # The VERSION is the main release number i.e. 1.7 or 2.1
+    env:      
+      JDF_VERSION: 1.7      
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout source
         uses: actions/checkout@v2
 
-      # Build test. 
-      - name: Set current date as env variable
+      # Get the date 
+      - name: Get date
         run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
       
-      # Secondary
-      - name: Extract tag
-        run: echo "::set-env name=VERSION::$($env:GITHUB_REF.replace('refs/heads/', 'XYZ'))"
+      # Use the build tag as the document version
+      - name: Get build tag
+        run: echo "::set-env name=VERSION::$($env:GITHUB_REF.replace('refs/tags/', ''))"
 
       - name: Check Build Variables
         run:  >
           python Build\buildtest.py ICS_JDF_Base.ini 
-          "ICS-JDF-Base Draft-$env:NOW Date-$env:GITHUB_RUN_NUMBER"
-          "Version $env:FULL_VERSION Draft-$env:NOW Date-$env:GITHUB_RUN_NUMBER"
+          "ICS-JDF-Base $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+          "$env:JDF_VERSION Draft-$env:VERSION"
+          "$env:GITHUB_RUN_NUMBER"          
 
       # Uses the remote self-host to build the ICS
-      #- name: Build ICS-Base Specification
-      #  run: python Build\specbuilder.py ICS_JDF_Base.ini "$env:GITHUB_REF" "$env:GITHUB_EVENT_NAME"
-
-      #- name: Upload ICS Specification artifact
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    name: ICS-JDF-Base-artifact
-      #    path: target/*.pdf
+#      - name: Build ICS-Base Specification
+#        run:  >
+#          python Build\specbuilder.py ICS_JDF_Base.ini
+#          "ICS-JDF-Base $env:VERSION"
+#          "$env:VERSION"
+#
+#      - name: Upload ICS Specification artifact
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: ICS-JDF-Base-artifact
+#          path: target/*.pdf
           
