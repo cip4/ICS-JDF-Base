@@ -47,7 +47,7 @@ jobs:
         run:  >
           python Build\buildtest.py ICS_JDF_Base.ini 
           "ICS-JDF-Base $env:JDF_VERSION $env:VERSION"
-          "$env:JDF_VERSION Draft-$env:VERSION"
+          "$env:JDF_VERSION $env:VERSION"
           "Run-$env:GITHUB_RUN_NUMBER"          
 
       # Uses the remote self-host to build the ICS
@@ -55,7 +55,7 @@ jobs:
         run:  >
           python Build\specbuilder.py ICS_JDF_Base.ini
           "ICS-JDF-Base $env:JDF_VERSION $env:VERSION"
-          "$env:JDF_VERSION Draft-$env:VERSION"
+          "$env:JDF_VERSION $env:VERSION"
           "Run-$env:GITHUB_RUN_NUMBER"          
 
       - name: Upload ICS Specification artifact
