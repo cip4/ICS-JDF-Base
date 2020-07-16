@@ -11,12 +11,8 @@ on:
 
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'     
-        required: true
-        default: 'warning'
       tags:
-        description: 'Test scenario tags'  
+        description: 'Manual Run'  
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -58,9 +54,19 @@ jobs:
           "$env:JDF_VERSION $env:VERSION"
           "Run-$env:GITHUB_RUN_NUMBER"          
 
+      # Upload the artifact 
       - name: Upload ICS Specification artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ICS-JDF-Base-artifact
+          name: ICS-JDF-Base-Release-artifact
           path: target/*.pdf
           
+      # Upload the release
+      - name: Upload to release
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/*.pdf
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true

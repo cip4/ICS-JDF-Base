@@ -7,6 +7,11 @@ name: Snapshot Build
 on:
   push:
     branches: [ master ]
+
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Manual Run'  
     
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -49,6 +54,6 @@ jobs:
       - name: Upload ICS Specification artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ICS-JDF-Base-artifact
+          name: ICS-JDF-Base-Snapshot-artifact
           path: target/*.pdf
           
