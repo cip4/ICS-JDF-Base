@@ -55,7 +55,7 @@ jobs:
         run:  >
           python Build\specbuilder.py ICS_JDF_Base.ini
           "ICS-JDF-Base $env:VERSION"
-          "$env:VERSION"
+          "Run-$env:VERSION"
 
       - name: Upload ICS Specification artifact
         uses: actions/upload-artifact@v2
