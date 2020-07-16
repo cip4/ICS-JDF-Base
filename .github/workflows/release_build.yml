@@ -7,7 +7,7 @@ name: Release Build
 on:
   push:
     tags:
-      - *
+      - '*'
 
   workflow_dispatch:
     inputs:
