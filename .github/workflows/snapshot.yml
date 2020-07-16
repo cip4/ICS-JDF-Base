@@ -35,7 +35,7 @@ jobs:
           python Build\buildtest.py ICS_JDF_Base.ini
           "ICS-JDF-Base $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
           "$env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
-          "$env:GITHUB_RUN_NUMER"
+          "$env:GITHUB_RUN_NUBMER"
 
       # Uses the remote self-host to build the ICS
 #      - name: Build ICS-Base Specification
