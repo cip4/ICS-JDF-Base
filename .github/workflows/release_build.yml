@@ -41,7 +41,7 @@ jobs:
       
       # Secondary
       - name: Extract tag
-        run: echo "::set-env name=VERSION::$GITHUB_REF.replace('refs', 'XYZ')"
+        run: echo "::set-env name=VERSION::$(${{GITHUB_REF}}.replace('refs', 'XYZ'))"
 
       - name: Check Build Variables
         run:  >
