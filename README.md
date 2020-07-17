@@ -1,4 +1,4 @@
-# ICS-J-Base
+# ICS-JDF-Base
 
 **JDF Base ICS**
 
@@ -27,7 +27,7 @@ Each build process produces a single PDF. This is either a release version for p
 
 ### Build Process
 
-CI builds are triggered by any 'push' or 'pull-request'.
-Release builds are triggered by adding a git tag to a commit of the form 'Release-foobar. In this case the value of foobar will be used as the document identifier on both the cover and in the resulting artefact file name.
+CI builds are triggered by any 'push' to the [MASTER] branch. There is an option to trigger this build manually in the event that an automated CI build fails due to issues with the build process.
 
-
+Release builds are triggered by adding a git tag to a commit. The value of tag will be used as the document identifier on both the cover and in the resulting artefact file name.<br/>
+For example use a tag of 'Draft-IP-4' or 'Version 2.1 Final'
