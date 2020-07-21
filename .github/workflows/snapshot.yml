@@ -3,7 +3,9 @@
 name: Snapshot Build
 # The VERSION is the main release number i.e. 1.7 or 2.1
 env:      
-  JDF_VERSION: 1.7      
+  JDF_VERSION:    '1.7'
+  JDF_FILE_NAME:  ICS-JDF-Base
+  CONFIG_FILE:    ICS_JDF_Base.ini
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -36,16 +38,16 @@ jobs:
       # Build test - only required to 'see' github's variables.
       - name: Check Build Variables
         run:  >
-          python Build\buildtest.py ICS_JDF_Base.ini
-          "ICS-JDF-Base $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+          python Build\buildtest.py $env:CONFIG_FILE
+          "$env:JDF_FILE_NAME $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
           "$env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
           "Run-$env:GITHUB_RUN_NUMBER"
 
       # Uses the remote self-host to build the ICS
       - name: Build ICS-Base Specification
         run:  >
-          python Build\specbuilder.py ICS_JDF_Base.ini
-          "ICS-JDF-Base $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+          python Build\specbuilder.py $env:CONFIG_FILE
+          "$env:JDF_FILE_NAME $env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
           "$env:JDF_VERSION Draft-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
           "Run-$env:GITHUB_RUN_NUMER"
 
@@ -53,6 +55,6 @@ jobs:
       - name: Upload ICS Specification artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ICS-JDF-Base-Snapshot-artifact
+          name: ${{ env.JDF_FILE_NAME }}-artifact
           path: target/*.pdf
           
