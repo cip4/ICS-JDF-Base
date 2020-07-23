@@ -1,11 +1,19 @@
 # ICS-JDF-Base
+Because the JDF Specification is quite large, it is unrealistic (and not very useful) for any JDF enabled product to implement the JDF Specificaion in full. Yet, if each JDF enabled product were to implement an arbitrary subset of the JDF Specificaion, interoperability between JDF enabled products would be highly unlikely.
 
-**JDF Base ICS**
+Hence, there is a need for a number of well specified subsets of JDF, each defining an interface between pairs of vendor’s products in the workflow. The mechanism for specifying such a subset of JDF is the Interoperability Conformance Specification (ICS). An ICS defines a subset of JDF by means of Conformance Requirements, which are a set of requirements.
 
-The CIP4 Base ICS for JDF defines the minimum conformance requirements for products that implement the JDF 1.7 specification. 
+When a JDF enabled product meets the manager Conformance Requirement of a particular ICS, it achieves interoperability with other JDF enabled products that meet the corresponding Worker Conformance Requirements of the same ICS. Note: The definitions of ‘this type of term’ appear in Section 1.1 Glossary.
+JDF is a very comprehensive job ticket format that allows for many different ways to specify a digital print job. To minimize complexity and to better guarantee interoperability between JDF producers and consumers, this ICS identifies a relatively small subset of JDF for digital wide format printing.
+
+A description of the conformance tables and other ICS notation can be found in the CIP4 Base ICS.
+
+<br />
 
 ## Issue Tracking
 TBD
+
+<br />
 
 ## Development Notes
 ### Release a new Version
