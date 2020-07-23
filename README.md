@@ -1,4 +1,4 @@
-# Base ICS (JDF)
+# JDF Base ICS
 Because the JDF Specification is quite large, it is unrealistic (and not very useful) for any JDF enabled product to implement the JDF Specificaion in full. Yet, if each JDF enabled product were to implement an arbitrary subset of the JDF Specificaion, interoperability between JDF enabled products would be highly unlikely.
 
 Hence, there is a need for a number of well specified subsets of JDF, each defining an interface between pairs of vendor’s products in the workflow. The mechanism for specifying such a subset of JDF is the Interoperability Conformance Specification (ICS). An ICS defines a subset of JDF by means of Conformance Requirements, which are a set of requirements.
