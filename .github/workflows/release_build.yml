@@ -4,7 +4,7 @@ name: Release Build
 # The VERSION is the main release number i.e. 1.7 or 2.1
 env:      
   JDF_VERSION:    '1.7'
-  JDF_FILE_NAME:  ICS-JDF-Base
+  JDF_FILE_NAME:  ICS JDF Base
   CONFIG_FILE:    ICS_JDF_Base.ini
 
 # Controls when the action will run. Triggers the workflow on push or pull request
