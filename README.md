@@ -21,7 +21,7 @@ Creation and publishing of a new version to GitHub Release.
 
 ```bash
 $ git tag -a ICS-JDF-Base-[VERSION] -m "[TITLE]"
-$ git push origin ICS-JDF-Base-[VERSION] 
+$ git push origin ICS-JDF-Base-[VERSION]
 ```
 
 In case a build has been failed, a tag can be deleted using the following command:
