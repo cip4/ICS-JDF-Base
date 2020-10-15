@@ -66,6 +66,6 @@ jobs:
           username: ${{ secrets.CONFLUENCE_USER }}
           password: ${{ secrets.CONFLUENCE_PASSWORD }}
           contentId: 15663320
-          label: 'ics-jdf-base,ics-snapshot'
+          label: 'ics-jdf-base,ics-draft'
           filePattern: 'target/*.pdf'
           
