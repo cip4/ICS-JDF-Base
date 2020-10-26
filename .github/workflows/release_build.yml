@@ -24,7 +24,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, framemaker-2015] 
+    runs-on: [framemaker-2015] 
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,28 +32,30 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      # Get the date 
-      - name: Get date
-        run: echo "::set-env name=NOW::$(date -UFormat '%Y%m%d')"
+      # New get date
+      - name: Get current time/date
+        uses: srfrnk/current-time@master
+        id: current-time
+        with:
+          format: YYYYMMDD
       
-      # Use the build tag as the document version
+      # Use the build tag as the document version - it needs extracting from the full
+      # path used by github - essentially stripping off the front.
       - name: Get build tag
-        run: echo "::set-env name=VERSION::$($env:GITHUB_REF.replace('refs/tags/', ''))"
-
-      - name: Check Build Variables
-        run:  >
-          python Build\buildtest.py $env:CONFIG_FILE 
-          "$env:JDF_FILE_NAME $env:JDF_VERSION $env:VERSION"
-          "$env:JDF_VERSION $env:VERSION"
-          "Run-$env:GITHUB_RUN_NUMBER"          
+        run: echo "::set-env name=release_tag::$($env:GITHUB_REF.replace('refs/tags/', ''))"
 
       # Uses the remote self-host to build the ICS
-      - name: Build ICS-Base Specification
-        run:  >
-          python Build\specbuilder.py $env:CONFIG_FILE
-          "$env:JDF_FILE_NAME $env:JDF_VERSION $env:VERSION"
-          "$env:JDF_VERSION $env:VERSION"
-          "Run-$env:GITHUB_RUN_NUMBER"          
+      - name: Build Specification
+        env:
+          NOW: "${{ steps.current-time.outputs.formattedTime }}"
+          version:      ${{env.JDF_VERSION}}
+          filename:     ${{env.JDF_FILE_NAME}} 
+          configfile:   ${{env.JDF_CONFIG_FILE}}
+        run: >
+          python Build\specbuilder.py $env:configfile
+          "$env:filename $env:version $env:release_tag"
+          "$env:version $env:release_tag"
+          "Run-$env:GITHUB_RUN_NUMBER"
 
       # Upload the artifact 
       - name: Upload ICS Specification artifact
