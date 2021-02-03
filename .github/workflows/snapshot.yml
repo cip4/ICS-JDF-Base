@@ -1,14 +1,19 @@
-# This is the basic workflow to build ICS documentation
+# This is the basic workflow to build draft documentation
 
 name: Snapshot Build
+## This section contains ALL variable specific for this project ##
 # The VERSION is the main release number i.e. 1.7 or 2.1
-env:      
-  JDF_VERSION:    '1.7'
-  JDF_FILE_NAME:  ICS JDF Base
-  CONFIG_FILE:    ICS_JDF_Base.ini
+env:
+  BUILD_NAME:           ICS-JDF-BASE
+  DOCUMENT_VERSION:     '1.7'
+  DOCUMENT_FILE_NAME:   ICS JDF BASE
+  CONFIG_FILE:          Build\ICS_JDF_Base.ini
+  CONFLUENCE_ID:        '15663320'
+  CONFLUENCE_LABELS:    'ics-jdf-base,ics-draft'
+  
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+## The remaining section SHOULD be common to all draft documentation builds
+# Controls when the action will run
 on:
   push:
     branches: [ master ]
@@ -17,48 +22,56 @@ on:
     inputs:
       tags:
         description: 'Manual Run'  
-    
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: [framemaker-2015]
+    runs-on: [framemaker-2020]
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # For access to other Git repositories - an access token is required. 
+      - name: Get GitHub Access Token
+        id: access_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_ID }}
+          private_key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }} 
+      
+      # Clean up working directory
+      - name: Clean up working directory
+        run:  rm -r -fo *
+        
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout source
         uses: actions/checkout@v2
-
-      # New get date
-      - name: Get current time/date
-        uses: srfrnk/current-time@master
-        id: current-time
         with:
-          format: YYYYMMDD
+          path: document
 
-      # Uses the remote self-host to build the ICS
-      # By 'renaming' the configuration variables to local variables
-      # we can always use the identical python command
-      - name: Build Specification
-        env:
-          NOW: "${{ steps.current-time.outputs.formattedTime }}"
-          version:      ${{env.JDF_VERSION}}
-          filename:     ${{env.JDF_FILE_NAME}} 
-          configfile:   ${{env.CONFIG_FILE}}
+      # Check out the build scripts
+      - name: Checkout build scripts
+        uses: actions/checkout@v2
+        with:
+          repository: cip4/cip4-document-builder
+          token: ${{ steps.access_token.outputs.token }}
+          path: builder
+
+      # Build the document parameters
+      - name: Build Document
+        timeout-minutes: 30
         run: >
-          python Build\specbuilder.py $env:configfile
-          "$env:filename $env:version DRAFT-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
-          "$env:version DRAFT-$env:NOW Build-$env:GITHUB_RUN_NUMBER"
+          python ..\builder\specbuilder.py $env:CONFIG_FILE
+          "$env:DOCUMENT_FILE_NAME $env:DOCUMENT_VERSION DRAFT-$((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
+          "$env:DOCUMENT_VERSION DRAFT-$((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
           "Run-$env:GITHUB_RUN_NUMBER"
+        working-directory: ./document
 
       # Upload any artefact produced.
-      - name: Upload ICS Specification artifact
+      - name: Upload Document
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.JDF_FILE_NAME }}-artifact
-          path: target/*.pdf
+          name: ${{ env.BUILD_NAME }}-artifact
+          path: document/target/*.pdf
           
       # Upload to Confluence
       - name: Confluence Upload
@@ -67,7 +80,6 @@ jobs:
           url: 'https://confluence.cip4.org'
           username: ${{ secrets.CONFLUENCE_USER }}
           password: ${{ secrets.CONFLUENCE_PASSWORD }}
-          contentId: 15663320
-          label: 'ics-jdf-base,ics-draft'
-          filePattern: 'target/*.pdf'
-          
+          contentId: ${{ env.CONFLUENCE_ID }}
+          label: ${{ env.CONFLUENCE_LABELS }}
+          filePattern: 'document/target/*.pdf'
