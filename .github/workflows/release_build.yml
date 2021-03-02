@@ -54,7 +54,7 @@ jobs:
       - name: Build Document
         timeout-minutes: 30
         run: >
-          python ..\builder\specbuilder.py $env:CONFIG_FILE
+          python ..\builder\scripts\specbuilder.py $env:CONFIG_FILE
           "$env:DOCUMENT_FILE_NAME $(${env:GITHUB_REF}.replace('refs/tags/',''))"
           "Release $(${env:GITHUB_REF}.replace('refs/tags/',''))"
           "Run-$env:GITHUB_RUN_NUMBER"

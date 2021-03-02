@@ -60,7 +60,7 @@ jobs:
       - name: Build Document
         timeout-minutes: 30
         run: >
-          python ..\builder\specbuilder.py $env:CONFIG_FILE
+          python ..\builder\scripts\specbuilder.py $env:CONFIG_FILE
           "$env:DOCUMENT_FILE_NAME $env:DOCUMENT_VERSION DRAFT-$((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
           "$env:DOCUMENT_VERSION DRAFT-$((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
           "Run-$env:GITHUB_RUN_NUMBER"
