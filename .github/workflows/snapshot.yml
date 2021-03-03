@@ -10,7 +10,8 @@ env:
   CONFIG_FILE:          Build\ICS_JDF_Base.ini
   CONFLUENCE_ID:        '15663320'
   CONFLUENCE_LABELS:    'ics-jdf-base,ics-draft'
-  
+
+  BUILD_UTILITY_EXE: c:\actions-runner\_work\_tool\document-processing\document-processing.exe  
 
 ## The remaining section SHOULD be common to all draft documentation builds
 # Controls when the action will run
@@ -65,6 +66,12 @@ jobs:
           "$env:DOCUMENT_VERSION DRAFT-$((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
           "Run-$env:GITHUB_RUN_NUMBER"
         working-directory: ./document
+        
+      # Mark pages with draft watermark
+      - name: Watermark pages
+        run: >
+          ${{ env.BUILD_UTILITY_EXE }} draft "$env:DOCUMENT_FILE_NAME*.pdf"
+        working-directory: ./document/target
 
       # Upload any artefact produced.
       - name: Upload Document
