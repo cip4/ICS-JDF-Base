@@ -10,6 +10,10 @@ env:
   CONFIG_FILE:          Build\ICS_JDF_Base.ini
   CONFLUENCE_ID:        '15663320'
   CONFLUENCE_LABELS:    'ics-jdf-base,milestone'
+  
+  DOCUMENT_COPYRIGHT:   'CIP4 Organization, all rights reserved'
+
+  BUILD_UTILITY_EXE: c:\actions-runner\_work\_tool\document-processing\document-processing.exe   
 
 ## The remaining section SHOULD be common to all draft documentation builds
 # Controls when the action will run
@@ -59,6 +63,12 @@ jobs:
           "Release $(${env:GITHUB_REF}.replace('refs/tags/',''))"
           "Run-$env:GITHUB_RUN_NUMBER"
         working-directory: ./document
+        
+      # Update document properties copyright
+      - name: Update copyright
+        run: >
+          ${{ env.BUILD_UTILITY_EXE }} info "$env:DOCUMENT_FILE_NAME*.pdf"
+          --copyright "$((Get-Date).ToString('MMMM yyyy')) $env:DOCUMENT_COPYRIGHT"
 
       # Upload any artefact produced.
       - name: Upload Document
