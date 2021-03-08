@@ -69,6 +69,7 @@ jobs:
         run: >
           ${{ env.BUILD_UTILITY_EXE }} info "$env:DOCUMENT_FILE_NAME*.pdf"
           --copyright "$((Get-Date).ToString('MMMM yyyy')) $env:DOCUMENT_COPYRIGHT"
+        working-directory: ./document/target
 
       # Upload any artefact produced.
       - name: Upload Document
