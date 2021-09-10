@@ -85,7 +85,7 @@ jobs:
         run: >
           ${{ env.BUILD_UTILITY_EXE }} info "$env:DOCUMENT_COVER_TITLE*.pdf"
           --copyright "$((Get-Date).ToString('MMMM yyyy')) $env:DOCUMENT_METADATA_COPYRIGHT"
-          --title     "$env:DOCUMENT_METADATA_TITLE Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER" 
+          --title     "$env:DOCUMENT_METADATA_TITLE $env:DOCUMENT_VERSION Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER" 
           --subject   "$env:DOCUMENT_METADATA_SUBJECT"
           --author    "$env:DOCUMENT_METADATA_AUTHOR"
           --keywords  "$env:DOCUMENT_METADATA_KEYWORDS"
