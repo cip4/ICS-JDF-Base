@@ -71,6 +71,10 @@ jobs:
           "$env:DOCUMENT_COVER_TITLE $env:DOCUMENT_VERSION Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
           "$env:DOCUMENT_COVER_TITLE"
           "$env:DOCUMENT_VERSION Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
+          "$env:DOCUMENT_METADATA_TITLE $env:DOCUMENT_VERSION Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER" 
+          "$env:DOCUMENT_VERSION Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
+          "$((Get-Date).ToString('MMMM yyyy')) $env:DOCUMENT_METADATA_COPYRIGHT"
+          "2000-$((Get-Date).ToString('yyyy'))"
           "Run-$env:GITHUB_RUN_NUMBER"
         working-directory: ./document
         
@@ -80,18 +84,6 @@ jobs:
           ${{ env.BUILD_UTILITY_EXE }} draft "$env:DOCUMENT_COVER_TITLE*.pdf"
         working-directory: ./document/target
         
-      # Update document meta-data properties
-      - name: Update Document Metadata
-        run: >
-          ${{ env.BUILD_UTILITY_EXE }} info "$env:DOCUMENT_COVER_TITLE*.pdf"
-          --copyright "$((Get-Date).ToString('MMMM yyyy')) $env:DOCUMENT_METADATA_COPYRIGHT"
-          --title     "$env:DOCUMENT_METADATA_TITLE $env:DOCUMENT_VERSION Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER" 
-          --subject   "$env:DOCUMENT_METADATA_SUBJECT"
-          --author    "$env:DOCUMENT_METADATA_AUTHOR"
-          --keywords  "$env:DOCUMENT_METADATA_KEYWORDS"
-          --version   "$env:DOCUMENT_VERSION Draft $((Get-Date).ToString('yyyyMMdd')) Build-$env:GITHUB_RUN_NUMBER"
-        working-directory: ./document/target
-
       # Upload any artefact produced.
       - name: Upload Document
         uses: actions/upload-artifact@v2
