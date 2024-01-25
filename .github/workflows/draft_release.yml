@@ -1,11 +1,13 @@
-# This is the basic workflow to build release documentation
+# This is the basic workflow to build draft release documentation
+# Draft releases allow WG to 'tag' a particular state of the repository and equivalent
+# PDF. Useful if a document is to be discussed at an interop, but continues to be edited
 
-name: Release Build
+name: Draft Release Build
 ## This section contains ALL variable specific for this project ##
-# The VERSION is the main release number i.e. 1.7 or 2.1 (here for convenience but the git tag is actually used)
+# The VERSION is the main release number i.e. 1.7 or 2.1
 env:
   BUILD_NAME:           ICS-JDF-BASE
-  #DOCUMENT_VERSION:     '1.7' not required for release build. Uses Tag of build.
+  DOCUMENT_VERSION:     '1.7'
   DOCUMENT_COVER_TITLE: Base ICS
   CONFIG_FILE:          Build\ICS_JDF_Base.ini
   CONFLUENCE_ID:        '1560313992'
@@ -17,14 +19,15 @@ env:
   DOCUMENT_METADATA_AUTHOR:     'CIP4 Organization'
   DOCUMENT_METADATA_KEYWORDS:   'Automation;CIM;CIP4;Graphic Arts;Graphics;Interface;Printing;Specification;Standard;Workflow;XML'
 
-  BUILD_UTILITY_EXE: c:\actions-runner\_work\_tool\document-processing\document-processing.exe   
+  BUILD_UTILITY_EXE: c:\actions-runner\_work\_tool\document-processing\document-processing.exe  
 
 ## The remaining section SHOULD be common to all draft documentation builds
 # Controls when the action will run
 on:
   push:
     tags:
-      - '1*'
+      - 'Draft*'
+ 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -59,20 +62,25 @@ jobs:
           token: ${{ steps.access_token.outputs.token }}
           path: builder
 
-      # Build the release document - note: no cover version required, part of cover title. 
+      # Build the document parameters
       - name: Build Document
         timeout-minutes: 30
         run: >
           python ..\builder\scripts\specbuilder.py $env:CONFIG_FILE
-          "$env:DOCUMENT_COVER_TITLE $(${env:GITHUB_REF}.replace('refs/tags/',''))"
-          "$env:DOCUMENT_COVER_TITLE $(${env:GITHUB_REF}.replace('refs/tags/',''))"
-          " "
-          "$env:DOCUMENT_METADATA_TITLE $(${env:GITHUB_REF}.replace('refs/tags/',''))"
-          "$(${env:GITHUB_REF}.replace('refs/tags/',''))"
-          "$((Get-Date).ToString('MMMM yyyy')) $env:DOCUMENT_METADATA_COPYRIGHT"
+          "$env:DOCUMENT_COVER_TITLE $env:DOCUMENT_VERSION $(${env:GITHUB_REF}.replace('refs/tags/',''))"
+          "$env:DOCUMENT_COVER_TITLE"
+          "$env:DOCUMENT_VERSION $(${env:GITHUB_REF}.replace('refs/tags/',''))"
+          "$env:DOCUMENT_METADATA_TITLE $env:DOCUMENT_VERSION $(${env:GITHUB_REF}.replace('refs/tags/',''))"
+          "$env:DOCUMENT_VERSION $(${env:GITHUB_REF}.replace('refs/tags/',''))"
           "2000-$((Get-Date).ToString('yyyy'))"
           "Run-$env:GITHUB_RUN_NUMBER"
         working-directory: ./document
+        
+      # Mark pages with draft watermark
+      - name: Watermark pages
+        run: >
+          ${{ env.BUILD_UTILITY_EXE }} draft "$env:DOCUMENT_COVER_TITLE*.pdf"
+        working-directory: ./document/target
         
       # Upload any artefact produced.
       - name: Upload Document
@@ -86,7 +94,7 @@ jobs:
         run: >
           echo "FULL_CONFLUENCE_LABELS=${env:CONFLUENCE_LABELS},$(${env:GITHUB_REF}.replace('refs/tags/',''))" | 
           Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          
+         
       # Upload to Confluence
       - name: Confluence Upload
         uses: cip4/action-confluence-upload@master
@@ -95,5 +103,5 @@ jobs:
           username: ${{ secrets.ATLASSIAN_USER }}
           password: ${{ secrets.ATLASSIAN_TOKEN }}
           contentId: ${{ env.CONFLUENCE_ID }}
-          label:    ${{ env.FULL_CONFLUENCE_LABELS }}
+          label: ${{ env.FULL_CONFLUENCE_LABELS }}
           filePattern: 'document/target/*.pdf'
