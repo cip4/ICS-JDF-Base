@@ -13,9 +13,6 @@ env:
   
   DOCUMENT_METADATA_COPYRIGHT:  'CIP4 Organization, all rights reserved'
   DOCUMENT_METADATA_TITLE:      'Base ICS'
-  DOCUMENT_METADATA_SUBJECT:    'Base Level Interoperability Conformance Specification for JDF'
-  DOCUMENT_METADATA_AUTHOR:     'CIP4 Organization'
-  DOCUMENT_METADATA_KEYWORDS:   'Automation;CIM;CIP4;Graphic Arts;Graphics;Interface;Printing;Specification;Standard;Workflow;XML'
 
   BUILD_UTILITY_EXE: c:\actions-runner\_work\_tool\document-processing\document-processing.exe   
 
