@@ -2,10 +2,10 @@
 
 name: Snapshot Build
 ## This section contains ALL variable specific for this project ##
-# The VERSION is the main release number i.e. 1.8 or 2.2
+# The VERSION is the main release number i.e. 1.9 or 2.2
 env:
   BUILD_NAME:           ICS-JDF-BASE
-  DOCUMENT_VERSION:     '1.8'
+  DOCUMENT_VERSION:     '1.9'
   DOCUMENT_COVER_TITLE: Base ICS
   CONFIG_FILE:          Build\ICS_JDF_Base.ini
   CONFLUENCE_ID:        '1560313992'
