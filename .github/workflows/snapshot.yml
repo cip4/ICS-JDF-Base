@@ -77,10 +77,10 @@ jobs:
         working-directory: ./document
         
       # Mark pages with draft watermark
-      - name: Watermark pages
-        run: >
-          ${{ env.BUILD_UTILITY_EXE }} draft "$env:DOCUMENT_COVER_TITLE*.pdf"
-        working-directory: ./document/target
+      #- name: Watermark pages
+      #  run: >
+      #    ${{ env.BUILD_UTILITY_EXE }} draft "$env:DOCUMENT_COVER_TITLE*.pdf"
+      #  working-directory: ./document/target
         
       # Upload any artefact produced.
       - name: Upload Document
