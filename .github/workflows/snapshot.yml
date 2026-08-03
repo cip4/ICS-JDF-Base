@@ -87,14 +87,3 @@ jobs:
         with:
           name: ${{ env.BUILD_NAME }}-artifact
           path: document/target/*.pdf
-          
-      # Upload to Confluence
-      - name: Confluence Upload
-        uses: cip4/action-confluence-upload@master
-        with:
-          url: 'https://cip4.atlassian.net/wiki'
-          username: ${{ secrets.ATLASSIAN_USER }}
-          password: ${{ secrets.ATLASSIAN_TOKEN }}
-          contentId: ${{ env.CONFLUENCE_ID }}
-          label: ${{ env.CONFLUENCE_LABELS }}
-          filePattern: 'document/target/*.pdf'
