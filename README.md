@@ -40,4 +40,4 @@ There is an option to trigger this build manually in the event that an automated
 
 Release builds are triggered by adding a git tag to a commit. The value of tag will be used as the document identifier on both the cover and in the resulting artefact file name.<br/>
 For example use a tag of 'Draft-IP-4' or 'Version 2.1 Final'.<br/>
-There is alos an option to trigger this build manually.
+There is also an option to trigger this build manually.
