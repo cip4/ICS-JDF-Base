@@ -35,12 +35,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # For access to other Git repositories - an access token is required. 
-      - name: Get GitHub Access Token
-        id: access_token
-        uses: actions/create-github-app-token@v3
-        with:
-          app_id: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_ID }}
-          private_key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }} 
+      #- name: Get GitHub Access Token
+      #  id: access_token
+      #  uses: actions/create-github-app-token@v3
+      #  with:
+      #    app_id: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_ID }}
+      #    private_key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }} 
       
       # Clean up working directory
       - name: Clean up working directory
@@ -48,13 +48,29 @@ jobs:
         
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/create-github-app-token@v3
+        id: app-token
         with:
+          # required
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }}
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.head_ref }}
+          # Make sure the value of GITHUB_TOKEN will not be persisted in repo's config
+          persist-credentials: false
           path: document
 
       # Check out the build scripts
       - name: Checkout build scripts
-        uses: actions/checkout@v2
+        uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          # required
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }}
+      - uses: actions/checkout@v6
         with:
           repository: cip4/cip4-document-builder
           token: ${{ steps.access_token.outputs.token }}
