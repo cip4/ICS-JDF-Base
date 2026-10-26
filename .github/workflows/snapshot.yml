@@ -40,7 +40,7 @@ jobs:
         uses: actions/create-github-app-token@v3
         with:
           client-id: ${{ vars.APP_CLIENT_ID }}
-          private_key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }}
+          private-key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }}
           owner:  ${{ github.repository_owner }}
           repositories: ${{ github.repository }}, cip4/cip4-document-builder
       
