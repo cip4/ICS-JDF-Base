@@ -37,7 +37,7 @@ jobs:
       # For access to other Git repositories - an access token is required. 
       - name: Get GitHub Access Token
         id: access_token
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@v3.1.0
         with:
           client_id: ${{ vars.APP_CLIENT_ID }}
           private_key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }}
