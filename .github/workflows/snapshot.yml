@@ -41,8 +41,8 @@ jobs:
         with:
           client-id: ${{ vars.APP_CLIENT_ID }}
           private-key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }}
-          owner:  ${{ github.repository_owner }}
-          repositories: ${{ github.repository }}, cip4/cip4-document-builder
+      #    owner:  ${{ github.repository_owner }}
+      #    repositories: ${{ github.repository }}, cip4/cip4-document-builder
       
       # Clean up working directory
       - name: Clean up working directory
