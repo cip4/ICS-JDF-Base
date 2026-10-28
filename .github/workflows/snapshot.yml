@@ -39,9 +39,9 @@ jobs:
         id: access_token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_ID }}
-          private-key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }}
-      #    owner:  ${{ github.repository_owner }}
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY_V2 }}
+          owner:  ${{ github.repository_owner }}
       #    repositories: ${{ github.repository }}, cip4/cip4-document-builder
       
       # Clean up working directory
@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: cip4/cip4-document-builder
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.access_token.outputs.token }}
           path: builder
 
       # Build the document parameters
