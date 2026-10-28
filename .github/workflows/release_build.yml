@@ -35,8 +35,9 @@ jobs:
         id: access_token
         uses: actions/create-github-app-token@v3
         with:
-          app_id: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_ID }}
-          private_key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY }} 
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.CIP4_GITHUB_ACTIONS_APP_KEY_V2 }}
+          owner:  ${{ github.repository_owner }}
       
       # Clean up working directory
       - name: Clean up working directory
